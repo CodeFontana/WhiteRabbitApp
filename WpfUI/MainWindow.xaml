@@ -1,0 +1,33 @@
+﻿<Window x:Class="WhiteRabbit.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WhiteRabbit" 
+        xmlns:vm="clr-namespace:WhiteRabbit.ViewModels"
+        xmlns:controls="clr-namespace:WhiteRabbit.Controls" 
+        d:DataContext="{d:DesignInstance Type=vm:MainViewModel}"
+        mc:Ignorable="d"
+        Title="WhiteRabbit" 
+        Height="450" 
+        Width="800"
+        ShowInTaskbar="{Binding ShowInTaskbar, Mode=TwoWay}"
+        WindowState="{Binding WindowState, Mode=TwoWay}">
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!--Main Content -->
+        <ContentControl Grid.Row="0" 
+                        Grid.Column="0" 
+                        Margin="20 0 0 0"
+                        Content="{Binding CurrentViewModel}"/>
+
+    </Grid>
+</Window>

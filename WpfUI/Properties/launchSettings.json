@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "WhiteRabbit": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
