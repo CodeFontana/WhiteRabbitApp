@@ -1,10 +1,8 @@
 ﻿using FileLoggerLibrary;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
-using System.IO;
 using System.Windows;
 using WhiteRabbit.ViewModels;
 
@@ -17,22 +15,11 @@ public partial class App : Application
     {
         try
         {
-            string env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            bool isDevelopment = string.IsNullOrEmpty(env) || env.ToLower() == "development";
-
             _appHost = Host.CreateDefaultBuilder()
-                .ConfigureAppConfiguration(config =>
-                {
-                    config.SetBasePath(Directory.GetCurrentDirectory());
-                    config.AddJsonFile("appSettings.json", true, true);
-                    config.AddJsonFile($"appSettings.{env}.json", true, true);
-                    config.AddUserSecrets<App>(optional: true);
-                    config.AddEnvironmentVariables();
-                })
                 .ConfigureLogging((context, builder) =>
                 {
                     builder.ClearProviders();
-                    //builder.AddFileLogger(context.Configuration);
+                    builder.AddFileLogger(context.Configuration);
                 })
                 .ConfigureServices((hostContext, services) =>
                 {
