@@ -7,7 +7,7 @@
 		<UseWPF>true</UseWPF>
 		<UseWindowsForms>true</UseWindowsForms>
 		<ApplicationIcon>Resources\WhiteRabbit.ico</ApplicationIcon>
-		<AssemblyName>Taskmgr</AssemblyName>
+		<AssemblyName>WpfUI</AssemblyName>
 	</PropertyGroup>
 
 	<ItemGroup>
