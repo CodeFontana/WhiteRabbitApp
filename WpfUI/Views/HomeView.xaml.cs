@@ -1,6 +1,7 @@
 ﻿using System.Windows.Controls;
 
-namespace WhiteRabbit.Views;
+namespace WpfUI.Views;
+
 public partial class HomeView : UserControl
 {
     public HomeView()

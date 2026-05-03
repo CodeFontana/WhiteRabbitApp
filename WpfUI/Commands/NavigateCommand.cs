@@ -1,9 +1,7 @@
-﻿using System;
-using System.Windows;
-using WhiteRabbit.ViewModels;
-using WpfUI.ViewModels;
+﻿using WpfUI.ViewModels;
 
-namespace WhiteRabbit.Commands;
+namespace WpfUI.Commands;
+
 public class NavigateCommand : CommandBase
 {
     private readonly MainViewModel _mainViewModel;
@@ -13,7 +11,7 @@ public class NavigateCommand : CommandBase
         _mainViewModel = mainViewModel;
     }
 
-    public override void Execute(object parameter)
+    public override void Execute(object? parameter)
     {
         if (parameter is string viewType)
         {

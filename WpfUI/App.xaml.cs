@@ -1,28 +1,22 @@
 ﻿using System;
 using System.Windows;
-using FileLoggerLibrary;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using WpfUI.ViewModels;
 
-namespace WhiteRabbit;
+namespace WpfUI;
 
 public partial class App : Application
 {
     private IHost? _appHost;
+    private IServiceScope? _appScope;
 
     public App()
     {
         try
         {
             _appHost = Host.CreateDefaultBuilder()
-                .ConfigureLogging((context, builder) =>
-                {
-                    builder.ClearProviders();
-                    builder.AddFileLogger(context.Configuration);
-                })
-                .ConfigureServices((hostContext, services) =>
+                .ConfigureServices((_, services) =>
                 {
                     services.AddScoped<MainViewModel>();
                     services.AddScoped(sp => new MainWindow(sp.GetRequiredService<MainViewModel>()));
@@ -52,8 +46,8 @@ public partial class App : Application
         }
 
         await _appHost.StartAsync();
-        using IServiceScope scope = _appHost.Services.CreateScope();
-        MainWindow mainWindow = scope.ServiceProvider.GetRequiredService<MainWindow>();
+        _appScope = _appHost.Services.CreateScope();
+        MainWindow mainWindow = _appScope.ServiceProvider.GetRequiredService<MainWindow>();
         mainWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
         mainWindow.Show();
         base.OnStartup(e);
@@ -63,6 +57,9 @@ public partial class App : Application
     {
         try
         {
+            _appScope?.Dispose();
+            _appScope = null;
+
             if (_appHost != null)
             {
                 await _appHost.StopAsync();

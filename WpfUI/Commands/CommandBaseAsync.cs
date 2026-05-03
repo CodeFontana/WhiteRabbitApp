@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace WhiteRabbit.Commands;
+namespace WpfUI.Commands;
+
 public abstract class CommandBaseAsync : CommandBase
 {
     private bool _isExecuting;
 
     private bool IsExecuting
     {
-        get { return _isExecuting; }
+        get => _isExecuting;
         set
         {
             _isExecuting = value;
@@ -16,13 +17,12 @@ public abstract class CommandBaseAsync : CommandBase
         }
     }
 
-    public override bool CanExecute(object parameter)
+    public override bool CanExecute(object? parameter)
     {
         return !IsExecuting && base.CanExecute(parameter);
     }
 
-
-    public override async void Execute(object parameter)
+    public override async void Execute(object? parameter)
     {
         IsExecuting = true;
 
@@ -34,8 +34,7 @@ public abstract class CommandBaseAsync : CommandBase
         {
             IsExecuting = false;
         }
-
     }
 
-    public abstract Task ExecuteAsync(object parameter);
+    public abstract Task ExecuteAsync(object? parameter);
 }

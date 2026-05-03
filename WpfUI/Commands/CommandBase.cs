@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace WhiteRabbit.Commands;
+namespace WpfUI.Commands;
 
 public abstract class CommandBase : ICommand
 {
@@ -16,6 +16,6 @@ public abstract class CommandBase : ICommand
 
     protected void OnCanExecutedChanged()
     {
-        CanExecuteChanged?.Invoke(this, new EventArgs());
+        CanExecuteChanged?.Invoke(this, EventArgs.Empty);
     }
 }

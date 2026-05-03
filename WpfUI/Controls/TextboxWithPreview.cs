@@ -2,7 +2,8 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace WhiteRabbit.Controls;
+namespace WpfUI.Controls;
+
 public class TextboxWithPreview : TextBox
 {
     static TextboxWithPreview()
@@ -17,55 +18,33 @@ public class TextboxWithPreview : TextBox
 
     public string TextPreview
     {
-        get { return (string)GetValue(TextPreviewProperty); }
-        set { SetValue(TextPreviewProperty, value); }
+        get => (string)GetValue(TextPreviewProperty);
+        set => SetValue(TextPreviewProperty, value);
     }
 
     public static readonly DependencyProperty HasTextProperty =
-                DependencyProperty.Register("HasText",
-                    typeof(bool),
-                    typeof(TextboxWithPreview),
-                    new FrameworkPropertyMetadata(false,
-                        FrameworkPropertyMetadataOptions.BindsTwoWayByDefault
-                        | FrameworkPropertyMetadataOptions.AffectsRender));
+        DependencyProperty.Register("HasText",
+            typeof(bool),
+            typeof(TextboxWithPreview),
+            new FrameworkPropertyMetadata(false,
+                FrameworkPropertyMetadataOptions.BindsTwoWayByDefault
+                | FrameworkPropertyMetadataOptions.AffectsRender));
 
     public bool HasText
     {
-        get
-        {
-            return (bool)GetValue(HasTextProperty);
-        }
-        set
-        {
-            SetValue(HasTextProperty, value);
-        }
+        get => (bool)GetValue(HasTextProperty);
+        set => SetValue(HasTextProperty, value);
     }
 
     protected override void OnTextInput(TextCompositionEventArgs e)
     {
-        if (string.IsNullOrEmpty(e.Text) == false)
-        {
-            HasText = true;
-        }
-        else
-        {
-            HasText = false;
-        }
-
+        HasText = string.IsNullOrEmpty(e.Text) == false;
         base.OnTextInput(e);
     }
 
     protected override void OnTextChanged(TextChangedEventArgs e)
     {
-        if (string.IsNullOrEmpty(Text) == false)
-        {
-            HasText = true;
-        }
-        else
-        {
-            HasText = false;
-        }
-
+        HasText = string.IsNullOrEmpty(Text) == false;
         base.OnTextChanged(e);
     }
 }

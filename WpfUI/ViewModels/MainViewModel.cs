@@ -5,13 +5,15 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
-using WhiteRabbit.Commands;
+using System.Windows.Resources;
+using WpfUI.Commands;
 
 namespace WpfUI.ViewModels;
 
-public class MainViewModel : ViewModelBase
+public sealed class MainViewModel : ViewModelBase
 {
     private readonly NotifyIcon _notifyIcon = new();
+    private bool _disposed;
 
     public MainViewModel()
     {
@@ -20,29 +22,56 @@ public class MainViewModel : ViewModelBase
         WindowState = WindowState.Normal;
         ShowInTaskbar = true;
 
-        // Initialize notification icon
-        Stream iconStream = System.Windows.Application.GetResourceStream(new Uri("Resources/WhiteRabbit.ico", UriKind.Relative)).Stream;
-        _notifyIcon.Icon = new Icon(iconStream);
+        _notifyIcon.Icon = LoadTrayIcon();
         _notifyIcon.Text = "WhiteRabbit Active";
 
-        // On notification icon single-click
-        _notifyIcon.Click +=
-            delegate (object? notifySendersender, EventArgs args)
-            {
-                WindowState = WindowState.Normal;
-            };
+        _notifyIcon.Click += (_, _) =>
+        {
+            WindowState = WindowState.Normal;
+        };
 
         ContinuousDisplay();
+    }
+
+    private static Icon LoadTrayIcon()
+    {
+        Uri[] candidates =
+        [
+            new Uri("pack://application:,,,/Resources/WhiteRabbit.ico"),
+            new Uri("/Resources/WhiteRabbit.ico", UriKind.Relative),
+            new Uri("Resources/WhiteRabbit.ico", UriKind.Relative)
+        ];
+
+        foreach (Uri uri in candidates)
+        {
+            try
+            {
+                StreamResourceInfo? info = System.Windows.Application.GetResourceStream(uri);
+                if (info?.Stream is { } stream)
+                {
+                    using (stream)
+                    {
+                        return new Icon(stream);
+                    }
+                }
+            }
+            catch (ArgumentException)
+            {
+                // Try next URI
+            }
+            catch (IOException)
+            {
+                // Try next URI
+            }
+        }
+
+        return SystemIcons.Application;
     }
 
     private ViewModelBase? _currentViewModel;
     public ViewModelBase? CurrentViewModel
     {
-        get
-        {
-            return _currentViewModel;
-        }
-
+        get => _currentViewModel;
         set
         {
             _currentViewModel = value;
@@ -53,10 +82,7 @@ public class MainViewModel : ViewModelBase
     private WindowState _windowState;
     public WindowState WindowState
     {
-        get
-        {
-            return _windowState;
-        }
+        get => _windowState;
         set
         {
             _windowState = value;
@@ -79,10 +105,7 @@ public class MainViewModel : ViewModelBase
     private bool _showInTaskbar;
     public bool ShowInTaskbar
     {
-        get
-        {
-            return _showInTaskbar;
-        }
+        get => _showInTaskbar;
         set
         {
             _showInTaskbar = value;
@@ -95,7 +118,7 @@ public class MainViewModel : ViewModelBase
     [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
     private static extern EXECUTION_STATE SetThreadExecutionState(EXECUTION_STATE esFlags);
 
-    [FlagsAttribute]
+    [Flags]
     public enum EXECUTION_STATE : uint
     {
         ES_AWAYMODE_REQUIRED = 0x00000040,
@@ -106,10 +129,26 @@ public class MainViewModel : ViewModelBase
 
     public static void ContinuousDisplay()
     {
-        // Forces the display to be ON by resetting the display idle timer
         SetThreadExecutionState(
             EXECUTION_STATE.ES_CONTINUOUS |
             EXECUTION_STATE.ES_DISPLAY_REQUIRED |
             EXECUTION_STATE.ES_SYSTEM_REQUIRED);
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (_disposed)
+        {
+            return;
+        }
+
+        if (disposing)
+        {
+            _notifyIcon.Visible = false;
+            _notifyIcon.Dispose();
+        }
+
+        _disposed = true;
+        base.Dispose(disposing);
     }
 }
