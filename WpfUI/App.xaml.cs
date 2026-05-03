@@ -1,15 +1,16 @@
-﻿using FileLoggerLibrary;
+﻿using System;
+using System.Windows;
+using FileLoggerLibrary;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Windows;
-using WhiteRabbit.ViewModels;
+using WpfUI.ViewModels;
 
 namespace WhiteRabbit;
+
 public partial class App : Application
 {
-    private IHost _appHost;
+    private IHost? _appHost;
 
     public App()
     {
@@ -43,6 +44,13 @@ public partial class App : Application
 
     protected override async void OnStartup(StartupEventArgs e)
     {
+        if (_appHost is null)
+        {
+            Application.Current.Shutdown();
+            base.OnStartup(e);
+            return;
+        }
+
         await _appHost.StartAsync();
         using IServiceScope scope = _appHost.Services.CreateScope();
         MainWindow mainWindow = scope.ServiceProvider.GetRequiredService<MainWindow>();

@@ -7,10 +7,11 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using WhiteRabbit.Commands;
 
-namespace WhiteRabbit.ViewModels;
+namespace WpfUI.ViewModels;
+
 public class MainViewModel : ViewModelBase
 {
-    private NotifyIcon _notifyIcon = new();
+    private readonly NotifyIcon _notifyIcon = new();
 
     public MainViewModel()
     {
@@ -26,7 +27,7 @@ public class MainViewModel : ViewModelBase
 
         // On notification icon single-click
         _notifyIcon.Click +=
-            delegate (object notifySendersender, EventArgs args)
+            delegate (object? notifySendersender, EventArgs args)
             {
                 WindowState = WindowState.Normal;
             };
@@ -34,8 +35,8 @@ public class MainViewModel : ViewModelBase
         ContinuousDisplay();
     }
 
-    private ViewModelBase _currentViewModel;
-    public ViewModelBase CurrentViewModel
+    private ViewModelBase? _currentViewModel;
+    public ViewModelBase? CurrentViewModel
     {
         get
         {
@@ -92,7 +93,7 @@ public class MainViewModel : ViewModelBase
     public ICommand NavigateCommand { get; set; }
 
     [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-    public static extern EXECUTION_STATE SetThreadExecutionState(EXECUTION_STATE esFlags);
+    private static extern EXECUTION_STATE SetThreadExecutionState(EXECUTION_STATE esFlags);
 
     [FlagsAttribute]
     public enum EXECUTION_STATE : uint

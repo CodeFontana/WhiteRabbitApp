@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using WhiteRabbit.ViewModels;
+using WpfUI.ViewModels;
 
 namespace WhiteRabbit.Commands;
 public class NavigateCommand : CommandBase

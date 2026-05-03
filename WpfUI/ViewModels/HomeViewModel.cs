@@ -1,4 +1,6 @@
-﻿namespace WhiteRabbit.ViewModels;
+﻿using WpfUI.ViewModels;
+
+namespace WhiteRabbit.ViewModels;
 
 public class HomeViewModel : ViewModelBase
 {
