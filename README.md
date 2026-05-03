@@ -1,19 +1,20 @@
 # WhiteRabbit
-This is a simple WPF application to prevent your Windows session from timing out to the lockscreen, effectively reducing the shear number of times you have to type your credentials in a given day.
+This is a simple WPF application to reduce how often your Windows session drops to the lock screen due to idle timeouts, which can cut down the sheer number of times you type credentials in a day.
 
 ## How to use
-Just compile, run and enjoy. All you need to do is minimize the Window, and you'll see the White Rabbit in your system tray. To close the app, simply click on the system tray icon to restore the window, and close it. While running in the background it will prevent your system from locking due to inactivity timeout.
+Compile and run. Minimize the window to send WhiteRabbit to the **system tray**. **Left‑click** the tray icon to restore the window; **right‑click** for the menu (**Open** / **Exit**) without restoring first. While minimized in the tray, the app signals that the display should stay active so typical idle-based lock behavior is less likely to trigger.
 
 ## How it works
-Just like playing a video or doing a presentation, this app uses Platform Invoke (p/invoke) of SetThreadExecutionState() in kernel32.dll, signaling the app requires a continuous state requiring the display.  
-  
-## Why do you need this?
-So if you're like me, and you're zipping in and out of several RDP sessions to do your work, it can be time consuming to have to type your credentials, over and over again.  
-  
-Picture the scenario where you need your 3pm coffee. You might have to grind the beans, wait for the water to heat up, and let the pour-over do its thing-- and by the time you return to your computer and unlock it-- all your RDP sessions are timed out to the lock screen. Or maybe you work from home, and there's no reason your system should timeout to the lock screen. Whatever your scenario, WhiteRabbit is for you!
+Similar to presentation or video playback, the app uses platform invoke (`SetThreadExecutionState` in `kernel32.dll`) to request continuous display and system availability.
 
-## Use Responsibly and at Your Own Risk
-This app is not designed to subvert security policies nor add risk to your organization. Remember to lock your desktop when you need to, as well as logoff any RDP sessions when you won't be using them. Use your common sense.
+## Lock screen and organization policy
+Windows may still lock the workstation because of **Group Policy**, **credential providers**, or other settings that are separate from display power management. This app adjusts idle/display signaling; it does **not** override mandatory lock policies. Follow your employer’s security rules and lock your session when you step away.
+
+## Why do you need this?
+If you move between several RDP sessions, repeated lock timeouts can mean typing passwords often—similar pain when you grab coffee and return to a locked desktop. Use WhiteRabbit only where it aligns with policy and personal judgment.
+
+## Use responsibly and at your own risk
+This app is not intended to weaken legitimate security controls. Lock when you should, and disconnect RDP sessions you are not using.
 
 ## For more information
-https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-setthreadexecutionstate
+https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-setthreadexecutionstate

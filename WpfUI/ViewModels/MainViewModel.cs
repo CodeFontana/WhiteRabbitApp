@@ -13,6 +13,7 @@ namespace WpfUI.ViewModels;
 public sealed class MainViewModel : ViewModelBase
 {
     private readonly NotifyIcon _notifyIcon = new();
+    private readonly ContextMenuStrip _trayMenu;
     private bool _disposed;
 
     public MainViewModel()
@@ -25,9 +26,19 @@ public sealed class MainViewModel : ViewModelBase
         _notifyIcon.Icon = LoadTrayIcon();
         _notifyIcon.Text = "WhiteRabbit Active";
 
-        _notifyIcon.Click += (_, _) =>
+        _trayMenu = new ContextMenuStrip();
+        _trayMenu.Items.Add("Open", null, (_, _) => WindowState = WindowState.Normal);
+        _trayMenu.Items.Add(new ToolStripSeparator());
+        _trayMenu.Items.Add("Exit", null, (_, _) => System.Windows.Application.Current.Shutdown());
+        _notifyIcon.ContextMenuStrip = _trayMenu;
+
+        // Left-click restores; right-click is reserved for the context menu only (Click fires for both).
+        _notifyIcon.MouseClick += (_, e) =>
         {
-            WindowState = WindowState.Normal;
+            if (e.Button == MouseButtons.Left)
+            {
+                WindowState = WindowState.Normal;
+            }
         };
 
         ContinuousDisplay();
@@ -145,6 +156,8 @@ public sealed class MainViewModel : ViewModelBase
         if (disposing)
         {
             _notifyIcon.Visible = false;
+            _notifyIcon.ContextMenuStrip = null;
+            _trayMenu.Dispose();
             _notifyIcon.Dispose();
         }
 

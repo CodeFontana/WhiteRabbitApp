@@ -11,7 +11,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Content Include="appSettings.json">
+		<Content Include="appsettings.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 		<Content Include="appsettings.*.json">
@@ -31,8 +31,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Content Update="appSettings.Development.json">
-	    <DependentUpon>appSettings.json</DependentUpon>
+	  <Content Update="appsettings.Development.json">
+	    <DependentUpon>appsettings.json</DependentUpon>
 	  </Content>
 	</ItemGroup>
 
